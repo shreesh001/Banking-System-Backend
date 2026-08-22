@@ -94,8 +94,6 @@ async function userLogoutController(req, res) {
         })
     }
 
-
-
     await tokenBlackListModel.create({
         token: token
     })
