@@ -6,7 +6,7 @@ const tokenBlackListModel = require("../models/blackList.model")
 
 async function authMiddleware(req, res, next) {
 
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[ 1 ]
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1]
 
     if (!token) {
         return res.status(401).json({
@@ -28,6 +28,12 @@ async function authMiddleware(req, res, next) {
 
         const user = await userModel.findById(decoded.userId)
 
+        if (!user) {
+            return res.status(401).json({
+                message: "Unauthorized access, user not found"
+            })
+        }
+
         req.user = user
 
         return next()
@@ -40,7 +46,7 @@ async function authMiddleware(req, res, next) {
 }
 async function authSystemUserMiddleware(req, res, next) {
 
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[ 1 ]
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1]
 
     if (!token) {
         return res.status(401).json({
@@ -60,6 +66,13 @@ async function authSystemUserMiddleware(req, res, next) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         const user = await userModel.findById(decoded.userId).select("+systemUser")
+
+        if (!user) {
+            return res.status(401).json({
+                message: "Unauthorized access, user not found"
+            })
+        }
+
         if (!user.systemUser) {
             return res.status(403).json({
                 message: "Forbidden access, not a system user"
