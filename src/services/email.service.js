@@ -20,12 +20,11 @@ transporter.verify((error, success) => {
     }
 });
 
-
 // Function to send email
 const sendEmail = async (to, subject, text, html) => {
     try {
         const info = await transporter.sendMail({
-            from: `"Backend Ledger" <${process.env.EMAIL_USER}>`, // sender address
+            from: `"Banking System" <${process.env.EMAIL_USER}>`, // sender address
             to, // list of receivers
             subject, // Subject line
             text, // plain text body
@@ -41,7 +40,7 @@ const sendEmail = async (to, subject, text, html) => {
 
 
 async function sendRegistrationEmail(userEmail, name) {
-    const subject = 'Welcome to Backend Ledger!';
+    const subject = 'Welcome to Banking System!';
     const text = `Hello ${name},\n\nThank you for registering at Backend Ledger. We're excited to have you on board!\n\nBest regards,\nThe Backend Ledger Team`;
     const html = `<p>Hello ${name},</p><p>Thank you for registering at Backend Ledger. We're excited to have you on board!</p><p>Best regards,<br>The Backend Ledger Team</p>`;
 
